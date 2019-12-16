@@ -34,6 +34,9 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2137931" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunDashboard">
@@ -177,7 +180,7 @@
       <option name="presentableId" value="Default" />
       <updated>1576466756730</updated>
       <workItem from="1576466757949" duration="30000" />
-      <workItem from="1576466854087" duration="1796000" />
+      <workItem from="1576466854087" duration="3544000" />
     </task>
     <servers />
   </component>
