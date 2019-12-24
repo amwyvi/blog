@@ -1,9 +1,11 @@
 package com.scs.web.blog.dao.impl;
 
+import ch.qos.logback.core.db.dialect.DBUtil;
 import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.util.BeanHandler;
+import com.scs.web.blog.util.DataUtil;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +30,16 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public void insert(Article article) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_article (title,summary,thumbnail,content,likes,comments,create_time) VALUES (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_article (user_id,title,summary,thumbnail,content,likes,comments,create_time) VALUES (?,?,?,?,?,?,?,?) ";
         PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1, article.getTitle());
-        pst.setString(2, article.getSummary());
-        pst.setString(3, article.getThumbnail());
-        pst.setString(4, article.getContent());
-        pst.setInt(5, article.getLikes());
-        pst.setInt(6, article.getComments());
-        pst.setObject(7, article.getCreateTime());
+        pst.setLong(1,article.getUserId());
+        pst.setString(2, article.getTitle());
+        pst.setString(3, article.getSummary());
+        pst.setString(4, article.getThumbnail());
+        pst.setString(5, article.getContent());
+        pst.setInt(6, 10);
+        pst.setInt(7, 10);
+        pst.setObject(8, DataUtil.getNowTime());
         pst.executeUpdate();
         DbUtil.close(connection, pst);
     }
@@ -157,7 +160,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 "ON a.topic_id = b.id " +
                 "LEFT JOIN t_user c " +
                 "ON a.user_id = c.id " +
-                "WHERE a.topic_id = ? ";
+                "WHERE a.user_id = ? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, userId);
         ResultSet rs = pst.executeQuery();
@@ -196,5 +199,21 @@ public class ArticleDaoImpl implements ArticleDao {
         pst.setLong(1,Id);
         pst.executeUpdate();
         DbUtil.close(connection,pst);
+    }
+
+    @Override
+    public void changeArticle(Article article) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql="Update t_article Set topic_id=?,title=?,summary=?,thumbnail=?,content=? Where id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+
+        pst.setLong(1,article.getTopicId());
+        pst.setString(2,article.getTitle());
+        pst.setString(3,article.getSummary());
+        pst.setString(4,article.getThumbnail());
+        pst.setString(5,article.getContent());
+        pst.setLong(6,article.getId());
+        pst.executeUpdate();
+        DbUtil.close(connection, pst);
     }
 }

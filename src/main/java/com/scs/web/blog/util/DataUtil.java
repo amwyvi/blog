@@ -105,6 +105,10 @@ public class DataUtil {
         int bound = random.nextInt(999);
         return now.minusHours(bound);
     }
+    public static LocalDateTime getNowTime() {
+        LocalDateTime now = LocalDateTime.now();
+        return now;
+    }
 
     /**
      * @return

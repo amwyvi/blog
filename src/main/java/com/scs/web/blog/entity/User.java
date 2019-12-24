@@ -36,8 +36,13 @@ public class User {
     private LocalDateTime createTime;
     private Short status;
 
-    public User(String mobile, String password) {
-        this.mobile = mobile;
-        this.password = password;
+
+    public User(String mobile, String password, LocalDate birthday, LocalDateTime createTime) {
+
+        this.mobile=mobile;
+        this.password=password;
+        this.birthday=birthday;
+        this.createTime=createTime;
+
     }
 }

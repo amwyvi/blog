@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -138,7 +140,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result signUp(UserDto userDto) {
-        User user = new User(userDto.getMobile(), userDto.getPassword());
+        User user = new User();
+        user.setMobile(userDto.getMobile());
+        user.setPassword(userDto.getPassword());
+        user.setBirthday(LocalDate.now());
+        user.setCreateTime(LocalDateTime.now());
         try {
             userDao.insert(user);
             return Result.success();
@@ -159,6 +165,16 @@ public class UserServiceImpl implements UserService {
             return Result.failure(ResultCode.USER_SIGN_UP_FAIL);
         }
 
+    }
+
+    @Override
+    public Result changeUser(User user) {
+        try {
+            userDao.changeUser(user);
+        } catch (Exception e){
+            logger.error("用户修改出错");
+        }
+        return Result.success(user);
     }
 
 }

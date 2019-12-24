@@ -97,6 +97,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Result insert(Article article) {
-return null;
+        try {
+            articleDao.insert(article);
+        } catch (SQLException e) {
+            logger.error("添加文章出现异常");
+        }
+        return Result.success(article);
+    }
+
+    @Override
+    public Result changeArticle(Article article) {
+        try {
+            articleDao.changeArticle(article);
+        } catch (Exception e){
+            logger.error("用户修改出错");
+        }
+        return Result.success(article);
     }
 }

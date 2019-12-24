@@ -17,11 +17,11 @@ public class ImageUtil {
         //绘图对象
         Graphics2D graphics = (Graphics2D) img.getGraphics();
         //设置颜色
-        graphics.setColor(new Color(68, 134, 49));
+        graphics.setColor(new Color(117, 171, 216));
         //绘制填充矩形
         graphics.fillRect(0, 0, width, height);
         //设置画笔颜色
-        graphics.setPaint(new Color(60, 63, 65));
+        graphics.setPaint(new Color(102, 109, 111));
         //设置字体
         Font font = new Font("微软雅黑", Font.BOLD, 40);
         graphics.setFont(font);

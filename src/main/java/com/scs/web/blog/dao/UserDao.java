@@ -79,4 +79,9 @@ public interface UserDao {
      */
     void deleteUserById(Long userId) throws SQLException;
 
+    /**
+     * 修改用户
+     */
+    int changeUser(User user) throws SQLException;
+
 }

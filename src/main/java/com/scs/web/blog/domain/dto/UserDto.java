@@ -3,6 +3,8 @@ package com.scs.web.blog.domain.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author
@@ -16,5 +18,8 @@ public class UserDto implements Serializable {
     private String mobile;
     private String password;
     private String code;
+    private String introduction;
+    private LocalDate birthday;
+    private LocalDateTime createTime;
 
 }

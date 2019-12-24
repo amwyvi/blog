@@ -42,7 +42,7 @@ public interface TopicDao {
     /**
      * 分页获取专题
      * @param currentPage
-     * @param pageCount
+     * @param
      * @return
      * @throws SQLException
      */

@@ -1,9 +1,12 @@
 package com.scs.web.blog.util;
 
 import com.scs.web.blog.domain.vo.ArticleVo;
+import com.scs.web.blog.domain.vo.CommentVo;
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.entity.User;
+import com.sun.source.doctree.CommentTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,4 +117,24 @@ public class BeanHandler {
         }
         return articleVoList;
     }
+
+
+    public static List<Comment> convertComment(ResultSet rs) {
+        List<Comment> commentList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                Comment comment = new Comment();
+                comment.setId(rs.getLong("id"));
+                comment.setUserId(rs.getLong("user_id"));
+                comment.setArticleId(rs.getLong("article_id"));
+                comment.setContent(rs.getString("content"));
+                comment.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                commentList.add(comment);
+            }
+        }catch (Exception e){
+            logger.error("评论查询出错");
+        }
+        return commentList;
+    }
+
 }

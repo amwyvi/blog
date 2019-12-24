@@ -3,6 +3,8 @@ package com.scs.web.blog.service;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.util.Result;
 
+import java.sql.SQLException;
+
 /**
  * @author
  * @ClassName ArticleService
@@ -53,4 +55,9 @@ public interface ArticleService {
      * 添加文章
      */
     Result insert(Article article);
+
+    /**
+     * 修改文章
+     */
+    Result changeArticle(Article article );
 }

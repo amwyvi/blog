@@ -1,9 +1,11 @@
 package com.scs.web.blog.dao.impl;
 
+import ch.qos.logback.core.db.dialect.DBUtil;
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.BeanHandler;
+import com.scs.web.blog.util.DataUtil;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -27,10 +31,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void insert(User user) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_user (mobile,password) VALUES (?,?) ";
+        String sql = "INSERT INTO t_user (mobile,password,birthday,create_Time) VALUES (?,?,?,?) ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setString(1, user.getMobile());
         pst.setString(2, user.getPassword());
+        pst.setObject(3,user.getBirthday());
+        pst.setObject(4,user.getCreateTime());
         pst.executeUpdate();
         DbUtil.close(connection, pst);
     }
@@ -56,7 +62,7 @@ public class UserDaoImpl implements UserDao {
                 pst.setInt(11, 0);
                 pst.setInt(12, 0);
                 pst.setInt(13, 0);
-                pst.setObject(14, user.getCreateTime());
+                pst.setObject(14, DataUtil.getNowTime());
                 pst.setShort(15, user.getStatus());
                 pst.addBatch();
             } catch (SQLException e) {
@@ -144,6 +150,24 @@ public class UserDaoImpl implements UserDao {
         pst.setLong(1,userId);
         pst.executeUpdate();
         DbUtil.close(connection,pst);
+    }
+
+    @Override
+    public int changeUser(User user) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        connection.setAutoCommit(false);
+        String sql = "Update t_user Set nickname=?,gender=?,address=?,introduction=?  Where id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1,user.getNickname());
+        pst.setString(2,user.getGender());
+        pst.setString( 3,user.getAddress());
+        pst.setString(4,user.getIntroduction());
+        pst.setLong(5,user.getId());
+        int n=pst.executeUpdate();
+        connection.commit();
+        DbUtil.close(connection, pst);
+        return n;
+
     }
 
 

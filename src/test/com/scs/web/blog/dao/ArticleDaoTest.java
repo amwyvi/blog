@@ -7,6 +7,7 @@ import com.scs.web.blog.util.SpiderUtil;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ArticleDaoTest {
@@ -51,13 +52,25 @@ public class ArticleDaoTest {
     @Test
     public void insert() throws SQLException {
         Article article = new Article();
+        article.setUserId((long)4);
         article.setTitle("lh");
         article.setSummary("lhxgs");
         article.setThumbnail("https://upload-images.jianshu.io/upload_images/3097674-ef123e711a6ffa5b.jpg");
         article.setContent("");
         article.setLikes(2);
-        article.setComments(1);
-        article.setCreateTime(null);
+        article.setComments(2);
+
         articleDao.insert(article);
+    }
+
+    @Test
+    public void changeArticle() throws SQLException {
+        ArticleVo article = articleDao.getArticle(90);
+        article.getArticle().setTopicId((long)5);
+        article.getArticle().setTitle("mkdn");
+        article.getArticle().setSummary("123");
+        article.getArticle().setThumbnail("");
+        article.getArticle().setContent("345");
+        articleDao.changeArticle(article.getArticle());
     }
 }

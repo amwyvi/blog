@@ -70,7 +70,7 @@ public interface ArticleDao {
     /**
      * 根据作者id查询所有文章
      *
-     * @param topicId
+     * @param userId
      * @return
      * @throws SQLException
      */
@@ -89,4 +89,12 @@ public interface ArticleDao {
      * 删除文章
      */
     void deleteById(Long Id) throws SQLException;
+
+    /**
+     * 修改文章
+     * @param article
+     * @throws SQLException
+     */
+    void changeArticle(Article article) throws SQLException;
+
 }

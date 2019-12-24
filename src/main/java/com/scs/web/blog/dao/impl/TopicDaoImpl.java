@@ -5,6 +5,7 @@ import com.scs.web.blog.domain.vo.TopicVo;
 import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.BeanHandler;
+import com.scs.web.blog.util.DataUtil;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class TopicDaoImpl implements TopicDao {
                 pst.setString(5, topic.getHomepage());
                 pst.setInt(6, topic.getArticles());
                 pst.setInt(7, topic.getFollows());
-                pst.setObject(8, topic.getCreateTime());
+                pst.setObject(8, DataUtil.getNowTime());
                 pst.addBatch();
             } catch (SQLException e) {
                 logger.error("批量加入专题数据产生异常");

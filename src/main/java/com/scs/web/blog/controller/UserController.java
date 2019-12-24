@@ -3,6 +3,7 @@ package com.scs.web.blog.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.ServiceFactory;
 import com.scs.web.blog.listener.MySessionContext;
 import com.scs.web.blog.service.UserService;
@@ -10,6 +11,7 @@ import com.scs.web.blog.util.HttpUtil;
 import com.scs.web.blog.util.Result;
 import com.scs.web.blog.util.ResultCode;
 import com.scs.web.blog.util.UrlPatten;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -71,6 +74,12 @@ public class UserController extends HttpServlet {
                 String mobile = req.getParameter("mobile");
                 HttpUtil.getResponseBody(resp, userService.checkMobile(mobile));
                 break;
+            case UrlPatten.USER_DELETE:
+                doDelete(req,resp);
+                break;
+            case UrlPatten.USER_CHANGE:
+                doPut(req,resp);
+                break;
             default:
         }
     }
@@ -101,7 +110,24 @@ public class UserController extends HttpServlet {
 
 
     private void signUp(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("注册");
+        req.setCharacterEncoding("UTF-8");
+        BufferedReader reader=req.getReader();
+        StringBuilder stringBuilder=new StringBuilder();
+        String line=null;
+        while((line=reader.readLine())!=null){
+            stringBuilder.append(line);
+        }
+        System.out.println(stringBuilder.toString());
+        Gson gson=new GsonBuilder().create();
+        UserDto user= gson.fromJson(stringBuilder.toString(),UserDto.class);
+        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+        System.out.println(user);
+        Result result;
+        result = userService.signUp(user);
+        resp.setContentType("application/json;charset=utf-8");
+        PrintWriter out =resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
     }
 
     @Override
@@ -112,6 +138,25 @@ public class UserController extends HttpServlet {
         Result result = userService.delete(Long.parseLong(id1));
         PrintWriter out=resp.getWriter();
         Gson gson=new GsonBuilder().create();
+        out.print(gson.toJson(result));
+        out.close();
+
+    }
+
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Gson gson=new GsonBuilder().create();
+        BufferedReader reader=req.getReader();
+        StringBuilder stringBuilder=new StringBuilder();
+        String line=null;
+        while ((line=reader.readLine())!=null){
+            stringBuilder.append(line);
+        }
+        System.out.println(stringBuilder);
+        User user=gson.fromJson(stringBuilder.toString(),User.class);
+        Result result=userService.changeUser(user);
+        PrintWriter out=resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
 

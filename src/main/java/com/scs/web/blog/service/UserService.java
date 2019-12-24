@@ -1,6 +1,7 @@
 package com.scs.web.blog.service;
 
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.Result;
 
 /**
@@ -21,20 +22,23 @@ public interface UserService {
 
     /**
      * 获取热门用户信息
+     *
      * @return Result
      */
     Result getHotUsers();
 
     /**
      * 获取分页用户信息
+     *
      * @param currentPage
      * @param count
      * @return Result
      */
-    Result selectByPage(int currentPage,int count);
+    Result selectByPage(int currentPage, int count);
 
     /**
      * 根据id查询用户详情数据
+     *
      * @param id
      * @return Result
      */
@@ -51,6 +55,7 @@ public interface UserService {
 
     /**
      * 验证手机号是否可用
+     *
      * @param mobile
      * @return Result
      */
@@ -58,6 +63,7 @@ public interface UserService {
 
     /**
      * 用户注册
+     *
      * @param userDto
      * @return Result
      */
@@ -67,4 +73,10 @@ public interface UserService {
      * 用户删除
      */
     Result delete(Long userId);
+
+    /**
+     * 用户修改
+     */
+    Result changeUser(User user);
+
 }

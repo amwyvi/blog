@@ -2,9 +2,12 @@ package com.scs.web.blog.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.factory.ServiceFactory;
 import com.scs.web.blog.service.ArticleService;
+import com.scs.web.blog.util.HttpUtil;
 import com.scs.web.blog.util.Result;
+import com.scs.web.blog.util.UrlPatten;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +16,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 /**
  * @author
@@ -92,6 +97,28 @@ public class ArticleController extends HttpServlet {
         Result result = articleService.delete(Long.parseLong(id1));
         PrintWriter out = resp.getWriter();
         Gson gson = new GsonBuilder().create();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        BufferedReader reader=req.getReader();
+        StringBuilder stringBuilder=new StringBuilder();
+        String line=null;
+        while((line=reader.readLine())!=null){
+            stringBuilder.append(line);
+        }
+        System.out.println(stringBuilder.toString());
+
+        Gson gson=new GsonBuilder().create();
+        Article article= gson.fromJson(stringBuilder.toString(),Article.class);
+        System.out.println(article);
+        Result result;
+        result = articleService.insert(article);
+        resp.setContentType("application/json;charset=utf-8");
+        PrintWriter out =resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
     }
